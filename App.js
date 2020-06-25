@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  FlatList,
+} from "react-native";
 
 export default function App() {
   const [enteredGoal, setEnteredGoal] = useState("");
@@ -13,7 +20,10 @@ export default function App() {
     // setCourseGoals([...courseGoals, enteredGoal]);
 
     // ES6 function syntax - always works!
-    setCourseGoals((currentGoals) => [...currentGoals, enteredGoal]);
+    setCourseGoals((currentGoals) => [
+      ...currentGoals,
+      { key: Math.random().toString(), value: enteredGoal },
+    ]);
   };
 
   return (
@@ -28,11 +38,14 @@ export default function App() {
         <Button title="Add" onPress={addGoalHandler} />
       </View>
 
-      <View>
-        {courseGoals.map((goal, i) => (
-          <Text key={i}>{goal}</Text>
-        ))}
-      </View>
+      <FlatList
+        data={courseGoals}
+        renderItem={(itemData) => (
+          <View style={styles.listItem}>
+            <Text>{itemData.item.value}</Text>
+          </View>
+        )}
+      />
     </View>
   );
 }
@@ -50,5 +63,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     width: "80%",
+  },
+  listItem: {
+    padding: 10,
+    marginVertical: 5,
+    backgroundColor: "pink",
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 5,
   },
 });
